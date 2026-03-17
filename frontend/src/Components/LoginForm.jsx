@@ -24,11 +24,11 @@ const LoginForm = () => {
     <>
       <Formik
         initialValues={{
-          userName: "",
+          username: "",
           password: "",
         }}
         validationSchema={Yup.object({
-          userName: Yup.string()
+          username: Yup.string()
             .max(15, "Must be 15 characters or less")
             .required("Required"),
           password: Yup.string()
@@ -37,6 +37,7 @@ const LoginForm = () => {
         })}
         onSubmit={async (values) => {
           try {
+            console.log(values)
             const response = await login(values).unwrap();
             dispatch(setCredentials(response));
           } catch (error) {
@@ -47,7 +48,7 @@ const LoginForm = () => {
         <Form>
           <MyTextInput
             label="User Name"
-            name="userName"
+            name="username"
             type="text"
             placeholder="Ivan"
           />
