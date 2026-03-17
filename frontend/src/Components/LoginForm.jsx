@@ -1,5 +1,8 @@
 import { Formik, Form, useField } from "formik";
+import { useDispatch } from "react-redux";
 import * as Yup from "yup";
+import { setCredentials, logout } from "../store/slices/authSlice";
+import { useLoginMutation } from "../api/authApi";
 
 const MyTextInput = ({ label, ...props }) => {
   const [field, meta] = useField(props);
@@ -15,29 +18,37 @@ const MyTextInput = ({ label, ...props }) => {
 };
 
 const LoginForm = () => {
+  const dispatch = useDispatch();
+  const [login]  = useLoginMutation();
   return (
     <>
       <Formik
         initialValues={{
-          userName: "",
+          username: "",
           password: "",
         }}
         validationSchema={Yup.object({
-          userName: Yup.string()
+          username: Yup.string()
             .max(15, "Must be 15 characters or less")
             .required("Required"),
           password: Yup.string()
             .required("Required")
-            .min(8, "Minimum of 8 characters"),
+            .min(5, "Minimum of 5 characters"),
         })}
-        onSubmit={(values) => {
-          console.log(JSON.stringify(values, null, 2));
+        onSubmit={async (values) => {
+          try {
+            console.log(values)
+            const response = await login(values).unwrap();
+            dispatch(setCredentials(response));
+          } catch (error) {
+            console.error("Login error", error);
+          }
         }}
       >
         <Form>
           <MyTextInput
             label="User Name"
-            name="userName"
+            name="username"
             type="text"
             placeholder="Ivan"
           />
