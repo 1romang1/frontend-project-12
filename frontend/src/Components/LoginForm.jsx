@@ -1,7 +1,8 @@
 import { Formik, Form, useField } from "formik";
 import { useDispatch } from "react-redux";
+import {useNavigate} from 'react-router-dom' 
 import * as Yup from "yup";
-import { setCredentials, logout } from "../store/slices/authSlice";
+import { setCredentials } from "../store/slices/authSlice";
 import { useLoginMutation } from "../api/authApi";
 
 const MyTextInput = ({ label, ...props }) => {
@@ -19,6 +20,7 @@ const MyTextInput = ({ label, ...props }) => {
 
 const LoginForm = () => {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const [login]  = useLoginMutation();
   return (
     <>
@@ -37,9 +39,9 @@ const LoginForm = () => {
         })}
         onSubmit={async (values) => {
           try {
-            console.log(values)
             const response = await login(values).unwrap();
             dispatch(setCredentials(response));
+            navigate('/')
           } catch (error) {
             console.error("Login error", error);
           }
