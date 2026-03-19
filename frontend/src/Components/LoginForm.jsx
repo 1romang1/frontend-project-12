@@ -1,6 +1,6 @@
 import { Formik, Form, useField } from "formik";
 import { useDispatch } from "react-redux";
-import {useNavigate} from 'react-router-dom' 
+import { useNavigate } from "react-router-dom";
 import * as Yup from "yup";
 import { setCredentials } from "../store/slices/authSlice";
 import { useLoginMutation } from "../api/authApi";
@@ -21,7 +21,7 @@ const MyTextInput = ({ label, ...props }) => {
 const LoginForm = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const [login]  = useLoginMutation();
+  const [login, { isError }] = useLoginMutation();
   return (
     <>
       <Formik
@@ -41,7 +41,7 @@ const LoginForm = () => {
           try {
             const response = await login(values).unwrap();
             dispatch(setCredentials(response));
-            navigate('/')
+            navigate("/");
           } catch (error) {
             console.error("Login error", error);
           }
@@ -61,7 +61,7 @@ const LoginForm = () => {
             type="text"
             placeholder="**********"
           />
-
+          {isError && <div>Неверный логин или пароль</div>}
           <button type="submit">Submit</button>
         </Form>
       </Formik>
