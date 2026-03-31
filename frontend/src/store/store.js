@@ -13,7 +13,7 @@ export const store = configureStore({
     messages: messagesReducer,
     [authApi.reducerPath]: authApi.reducer,
     [channelsApi.reducerPath]: channelsApi.reducer,
-    [messagesApi.reducerPath]: messagesReducer,
+    [messagesApi.reducerPath]: messagesApi.reducer,
   },
   middleware: (getDefaultMiddlware) =>
     getDefaultMiddlware().concat(
