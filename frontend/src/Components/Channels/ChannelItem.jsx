@@ -1,4 +1,4 @@
-const ChannelItem = () => {
+const ChannelItem = ({ channelName }) => {
   return (
     <li class="nav-item w-100">
       <button
@@ -6,7 +6,7 @@ const ChannelItem = () => {
         class="w-100 rounded-0 text-start btn btn-secondary"
       >
         <span class="me-1">#</span>
-        general
+        {channelName}
       </button>
     </li>
   );
