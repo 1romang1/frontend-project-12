@@ -1,11 +1,11 @@
 const ChannelItem = ({ channelName }) => {
   return (
-    <li class="nav-item w-100">
+    <li className="nav-item w-100">
       <button
         type="button"
-        class="w-100 rounded-0 text-start btn btn-secondary"
+        className="w-100 rounded-0 text-start btn btn-secondary"
       >
-        <span class="me-1">#</span>
+        <span className="me-1">#</span>
         {channelName}
       </button>
     </li>
