@@ -5,7 +5,7 @@ export const messagesApi = createApi({
     reducerPath: 'messagesApi',
     baseQuery,
     endpoints: (builder) => ({
-        getChannels: builder.query({
+        getMessages: builder.query({
             query: () => 'messages'
         })
     })
