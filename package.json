@@ -18,5 +18,8 @@
   "homepage": "https://github.com/1romang1/frontend-project-12#readme",
   "dependencies": {
     "@hexlet/chat-server": "^2.0.4"
+  },
+  "devDependencies": {
+    "concurrently": "^9.2.1"
   }
 }
