@@ -17,7 +17,7 @@ export const ChannelList = () => {
   return (
     <ul className="nav flex-column list-unstyled">
       {channels.map((channel) => (
-        <ChannelItem key={channel.id} channelName={channel.name} />
+        <ChannelItem key={channel.id} channel={channel} />
       ))}
     </ul>
   );
