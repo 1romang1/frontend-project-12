@@ -6,5 +6,5 @@ start:
 
 dev:
 	npx concurrently \
-	"cd frontend/ && npm run dev" \
-	"npx start-server -s ./frontend/dist"
+	"cd frontend && npm run dev" \
+	"npx start-server"
