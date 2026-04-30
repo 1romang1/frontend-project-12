@@ -52,4 +52,25 @@ export const offSocketEvent = (event, handler) => {
     socketInstance.off(event, handler);
 };
 
+export const emitSocketEvent = (event, handler) => {
+    const socketInstance = getSocket();
 
+    return new Promise((resolve, reject) => {
+        socketInstance.emit(event, payload, (response) => {
+            if (response?.status === 'error') {
+                reject(response);
+            } else {
+                resolve(response);
+            }
+        });
+    });
+};
+
+export const disconnectSocket = () => {
+    if (!socket) {
+        return;
+    }
+
+    socket.disconnect();
+    socket = null;
+};
