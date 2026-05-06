@@ -2,7 +2,7 @@ import { io } from 'socket.io-client';
 
 let socket = null;
 
-export const connectSocet = () => {
+export const connectSocket = () => {
     if (socket && socket.connected) {
         return socket;
     }
