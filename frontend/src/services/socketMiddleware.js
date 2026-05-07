@@ -1,6 +1,7 @@
 import { connectSocket, onSocketEvent, disconnectSocket } from "./socket";
-import {messagesApi} from "../api/messagesApi";
+import { messagesApi } from "../api/messagesApi";
 import { channelsApi } from "../api/channelsApi";
+import { act } from "react";
 
 export const socketMiddleware = (store) => {
     let isInitialized = false;
@@ -27,7 +28,65 @@ export const socketMiddleware = (store) => {
 
     return (next) => (action) => {
         if (action.type === "auth/setCredential" && !isInitialized) {
-            
+            const socket = connectSocket();
+            isInitialized = true;
+
+            onSocketEvent('newMessage', (message) => {
+                updateMessages((draft) => {
+                    const exists = draft.some((msg) => msg.id === message.id);
+                    if (!exists) {
+                        draft.push(message);
+                    }
+                });
+            });
+
+            onSocketEvent('removeMessage', ({ id }) => {
+                updateMessages((draft) => {
+                    const index = draft.findIndex((msg) => msg.id === id);
+                    if (index !== -1) {
+                        draft.splice(index, 1);
+                    }
+                });
+            });
+
+            onSocketEvent('renameMessage', (updatedMessage) => {
+                updateMessages((draft) => {
+                    const message = draft.find((msg) => msg.id === updatedMessage.id);
+                    if (message) {
+                        message.body === updatedMessage.body;
+                    }
+                });
+            });
+
+            onSocketEvent('newChannel', (channel) => {
+                updateChannels((draft) => {
+                    draft.push(message);
+                });
+            });
+
+            onSocketEvent('removeChannel', ({ id }) => {
+                updateChannels((draft) => {
+                    const index = draft.findIndex((chnl) => chnl.id === id);
+                    if (index !== -1) {
+                        draft.splice(index, 1);
+                    }
+                });
+            });
+
+            onSocketEvent('renameChannel', (updatedChannel) => {
+                updateChannels((draft) => {
+                    const channel = draft.find((chnl) => chnl.id === updatedChannel.id);
+                    if (channel) {
+                        channel.name === channel.name;
+                    }
+                });
+            });
         }
+
+        if (action.type === 'auth/logout') {
+            disconnectSocket();
+            isInitialized = false;
+        }
+        return next(action);
     }
 }

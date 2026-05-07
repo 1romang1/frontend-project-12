@@ -4,6 +4,7 @@ import { authReducer } from "./slices/authSlice";
 import { channelsApi } from "../api/channelsApi";
 import { channelsReducer } from "./slices/channelsSlice";
 import { messagesApi } from "../api/messagesApi";
+import { socketMiddleware } from "../services/socketMiddleware";
 // import { messagesReducer } from "./slices/messagesSlice";
 
 export const store = configureStore({
@@ -20,5 +21,6 @@ export const store = configureStore({
       authApi.middleware,
       channelsApi.middleware,
       messagesApi.middleware,
+      socketMiddleware,
     ),
 });
