@@ -7,15 +7,8 @@ export const messagesApi = createApi({
     endpoints: (builder) => ({
         getMessages: builder.query({
             query: () => 'messages'
-        }),
-        sendMessage: builder.mutation({
-            query: (message) => ({
-                url: 'messages',
-                method: 'POST',
-                body: message,
-            })
         })
     })
 })
 
-export const { useGetMessagesQuery, useSendMessageMutation } = messagesApi;
+export const { useGetMessagesQuery } = messagesApi;
