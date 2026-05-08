@@ -1,4 +1,5 @@
 import { Form, Button, InputGroup } from 'react-bootstrap';
+import { useSendMessageMutation } from '../../api/messagesApi';
 
 function MessageInput() {
   return (
