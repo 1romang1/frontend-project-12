@@ -1,23 +1,19 @@
 import { Form, Button, InputGroup } from 'react-bootstrap';
 import { useSendMessageMutation } from '../../api/messagesApi';
+import { useSelector } from 'react-redux';
+import { useFormik } from 'formik';
 
-function MessageInput() {
-  return (
-    <div className="mt-auto px-5 py-3">
-      <Form className="py-1 border rounded-2">
-        <InputGroup>
-          <Form.Control
-            name="body"
-            placeholder="Введите сообщение..."
-            className="border-0 p-0 ps-2"
-          />
-          <Button disabled variant="light">
-            ➤
-          </Button>
-        </InputGroup>
-      </Form>
+export const MessageInput = () => {
+  const [sendMessage] = useSendMessageMutation;
+
+  const currentChannelId = useSelector((state) => state.channels.currentChannelId);
+
+  const username = useSelector((state) => state.auth.username);
+
+console.log(username)
+return (
+    <div className="text-break mb-2">
+      <b>{username}</b>: {currentChannelId}
     </div>
   );
 }
-
-export default MessageInput;
