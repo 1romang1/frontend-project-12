@@ -1,7 +1,6 @@
 import { connectSocket, onSocketEvent, disconnectSocket } from "./socket";
 import { messagesApi } from "../api/messagesApi";
 import { channelsApi } from "../api/channelsApi";
-import { act } from "react";
 
 export const socketMiddleware = (store) => {
     let isInitialized = false;
@@ -53,14 +52,14 @@ export const socketMiddleware = (store) => {
                 updateMessages((draft) => {
                     const message = draft.find((msg) => msg.id === updatedMessage.id);
                     if (message) {
-                        message.body === updatedMessage.body;
+                        message.body = updatedMessage.body;
                     }
                 });
             });
 
             onSocketEvent('newChannel', (channel) => {
                 updateChannels((draft) => {
-                    draft.push(message);
+                    draft.push(channel);
                 });
             });
 
@@ -77,7 +76,7 @@ export const socketMiddleware = (store) => {
                 updateChannels((draft) => {
                     const channel = draft.find((chnl) => chnl.id === updatedChannel.id);
                     if (channel) {
-                        channel.name === channel.name;
+                        channel.name = channel.name;
                     }
                 });
             });
