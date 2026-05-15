@@ -27,7 +27,7 @@ export const socketMiddleware = (store) => {
     };
 
     return (next) => (action) => {
-        if (action.type === "auth/setCredential" && !isInitialized) {
+        if (action.type === "auth/setCredentials" && !isInitialized) {
             const socket = connectSocket();
             isInitialized = true;
 
