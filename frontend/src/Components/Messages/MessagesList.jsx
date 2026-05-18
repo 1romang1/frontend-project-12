@@ -1,7 +1,7 @@
 import { useSelector } from "react-redux";
 import { useGetMessagesQuery } from "../../api/messagesApi";
 import { MessageItem } from "./MessageItem";
-import MessageInput from "./MessageInput";
+import { MessageInput } from "./MessageInput";
 
 export const MessagesList = () => {
   const { data: messages = [] } = useGetMessagesQuery();

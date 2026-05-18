@@ -10,7 +10,7 @@ export const ChannelList = () => {
 
   useEffect(() => {
     if (isSuccess && channels.length > 0) {
-      dispatch(setCurrentChannelId(channels[0].id));
+      dispatch(setCurrentChannelId({id: channels[0].id}));
     }
   }, [isSuccess, channels, dispatch]);
 
