@@ -5,14 +5,14 @@ export const signupApi = createApi({
   reducerPath: "signupApi",
   baseQuery,
   endpoints: (builder) => ({
-    createUser: builder.mutation({
+    signup: builder.mutation({
       query: (credentials) => ({
         url: "signup",
         method: "POST",
         body: credentials,
       }),
-    })
-  })
+    }),
+  }),
 });
 
 export const { useSignupMutation } = signupApi;
