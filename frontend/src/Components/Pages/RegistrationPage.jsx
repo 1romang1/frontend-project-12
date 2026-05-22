@@ -9,4 +9,4 @@ const RegistrationPage = () => {
   );
 };
 
-export default LoginPage;
+export default RegistrationPage;
