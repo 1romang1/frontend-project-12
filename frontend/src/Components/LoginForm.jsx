@@ -1,4 +1,5 @@
 import { Formik, Form, useField } from "formik";
+import { Link } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import * as Yup from "yup";
@@ -63,6 +64,9 @@ const LoginForm = () => {
           />
           {isError && <div>Неверный логин или пароль</div>}
           <button type="submit">Submit</button>
+          <div>
+            Нет аккаунта? <Link to="/signup">Регистрация</Link>
+          </div>
         </Form>
       </Formik>
     </>

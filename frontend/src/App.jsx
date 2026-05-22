@@ -2,6 +2,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import MainPage from "./Components/Pages/MainPage";
 import LoginPage from "./Components/Pages/LoginPage";
 import NotFoundPage from "./Components/Pages/NotFoundPage";
+import RegistrationPage from "./Components/Pages/RegistrationPage";
 import ProtectedRoute from "./Components/ProtectedRoute";
 
 const App = () => {
@@ -10,6 +11,7 @@ const App = () => {
       <Routes>
         <Route path="/" element={<ProtectedRoute><MainPage /></ProtectedRoute>} />
         <Route path="/login" element={<LoginPage />} />
+        <Route path="/signup" element={<RegistrationPage />} />
         <Route path="*" element={<NotFoundPage />} />
       </Routes>
     </BrowserRouter>
