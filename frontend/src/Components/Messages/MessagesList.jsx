@@ -9,6 +9,8 @@ export const MessagesList = () => {
   const currentChannelId = useSelector(
     (state) => state.channels.currentChannelId,
   );
+  const channels = useSelector((state) => state.channels.channels);
+  const currentChannel = channels.find(channel => channel.id === currentChannelId)
 
   const currentChannelMessages = messages.filter(
     (m) => m.channelId === currentChannelId,
@@ -18,9 +20,9 @@ export const MessagesList = () => {
     <div className="d-flex flex-column h-100 flex-grow-1">
       <div className="bg-light mb-4 p-3 shadow-sm small">
         <p className="m-0">
-          <b># general</b>
+          <b># {currentChannel.name}</b>
         </p>
-        <span className="text-muted">1 сообщение</span>
+        <span className="text-muted">{currentChannelMessages.length} сообщение</span>
       </div>
 
       <div className="chat-messages overflow-auto px-5">
