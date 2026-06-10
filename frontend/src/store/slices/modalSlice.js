@@ -6,5 +6,11 @@ const modalSlice = createSlice({
         type: null,
         channelId: null,
     },
-    extraReducers:
+    reducers: {},
+    extraReducers: (builder) => {
+        builder.addMatcher(
+            (action) => action.type.endsWith('/pending'),
+            (state) => state.modal.type = null,
+        )
+    }
 })
