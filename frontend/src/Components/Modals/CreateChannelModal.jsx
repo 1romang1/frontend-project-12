@@ -1,48 +1,83 @@
-import Button from 'react-bootstrap/Button';
-import Modal from 'react-bootstrap/Modal';
+import { useSelector } from "react-redux";
+import Button from "react-bootstrap/Button";
+import Modal from "react-bootstrap/Modal";
 import { Formik, Form, useField } from "formik";
 import { useDispatch } from "react-redux";
 // import { useNavigate } from "react-router-dom";
 import * as Yup from "yup";
+import { use } from "react";
 // import { setCredentials } from "../store/slices/authSlice";
 // import { useSignupMutation } from "../api/signupApi";
 
 const MyTextInput = ({ label, ...props }) => {
-    const [field, meta] = useField(props);
-    return (
-        <>
-            <label htmlFor={props.id || props.name}>{label}</label>
-            <input className="text-input" {...field} {...props} />
-            {meta.touched && meta.error ? (
-                <div className="error">{meta.error}</div>
-            ) : null}
-        </>
-    );
+  const [field, meta] = useField(props);
+  return (
+    <>
+      <label htmlFor={props.id || props.name}>{label}</label>
+      <input className="text-input" {...field} {...props} />
+      {meta.touched && meta.error ? (
+        <div className="error">{meta.error}</div>
+      ) : null}
+    </>
+  );
 };
 
 const CreateChannelModal = () => {
-    const dispatch = useDispatch();
-    // const navigate = useNavigate();
-    // const [signup, { isError }] = useSignupMutation();
-    return (
-    <Modal
-      {...props}
-      size="lg"
-      aria-labelledby="contained-modal-title-vcenter"
-      centered
-    >
+  const modalStatus = useSelector((state) => state.modal.type);
+  const dispatch = useDispatch();
+  // const navigate = useNavigate();
+  // const [signup, { isError }] = useSignupMutation();
+  return (
+    <Modal aria-labelledby="contained-modal-title-vcenter" centered>
       <Modal.Header closeButton>
         <Modal.Title id="contained-modal-title-vcenter">
-          Modal heading
+          Добавить канал
         </Modal.Title>
       </Modal.Header>
       <Modal.Body>
-        <h4>Centered Modal</h4>
-        <p>
-          Cras mattis consectetur purus sit amet fermentum. Cras justo odio,
-          dapibus ac facilisis in, egestas eget quam. Morbi leo risus, porta ac
-          consectetur ac, vestibulum at eros.
-        </p>
+        <>
+          <Formik //код ниже взять из другого модуля для образца
+            initialValues={{
+              name: "",
+            }}
+            validationSchema={Yup.object({
+              name: Yup.string()
+                .max(20, "Must be 20 characters or less")
+                .required("Required")
+                .min(3, "Minimum of 3 characters"),
+            })}
+            onSubmit={async (values) => {
+              try {
+                const response = await login(values).unwrap();
+                dispatch(setCredentials(response));
+                navigate("/");
+              } catch (error) {
+                console.error("Login error", error);
+              }
+            }}
+          >
+            <Form>
+              <MyTextInput
+                label="User Name"
+                name="username"
+                type="text"
+                placeholder="Ivan"
+              />
+
+              <MyTextInput
+                label="Password"
+                name="password"
+                type="text"
+                placeholder="**********"
+              />
+              {isError && <div>Неверный логин или пароль</div>}
+              <button type="submit">Submit</button>
+              <div>
+                Нет аккаунта? <Link to="/signup">Регистрация</Link>
+              </div>
+            </Form>
+          </Formik>
+        </>
       </Modal.Body>
       <Modal.Footer>
         <Button onClick={props.onHide}>Close</Button>
