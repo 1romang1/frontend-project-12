@@ -15,11 +15,11 @@ export const channelsApi = createApi({
         body: data,
       }),
     }),
-    renameChannel: builder.query({
-      mutation: (data) => ({
-        url: `channels/${data.id}`,
+    renameChannel: builder.mutation({
+      query: ({id, name}) => ({
+        url: `channels/${id}`,
         method: "PATCH",
-        body: data.name,
+        body: name,
       }),
     }),
   }),
