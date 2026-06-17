@@ -5,12 +5,14 @@ import { authReducer } from "./slices/authSlice";
 import { channelsApi } from "../api/channelsApi";
 import { channelsReducer } from "./slices/channelsSlice";
 import { messagesApi } from "../api/messagesApi";
+import { modalReducer } from "./slices/modalSlice";
 import { socketMiddleware } from "../services/socketMiddleware";
 
 export const store = configureStore({
   reducer: {
     auth: authReducer,
     channels: channelsReducer,
+    modal: modalReducer,
 
     [authApi.reducerPath]: authApi.reducer,
     [signupApi.reducerPath]: signupApi.reducer,
