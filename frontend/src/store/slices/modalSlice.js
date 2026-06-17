@@ -16,12 +16,12 @@ const modalSlice = createSlice({
         builder.addMatcher(
             (action) => action.type.endsWith('/fulfilled'),
             (state) => {
-               state.type = null;
-               state.channelId = null;
+                state.type = null;
+                state.channelId = null;
             }
         )
     }
 })
 
-export const {openModal} = modalSlice.actions;
-export default modalSlice.reducer;
+export const { openModal } = modalSlice.actions;
+export const modalReducer = modalSlice.reducer;
