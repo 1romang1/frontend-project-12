@@ -23,8 +23,8 @@ const MyTextInput = ({ label, ...props }) => {
 };
 
 const CreateChannelModal = () => {
-  const modalStatus = useSelector((state) => state.modal.type);
-  const dispatch = useDispatch();
+  // const modalStatus = useSelector((state) => state.modal.type);
+  // const dispatch = useDispatch();
   // const navigate = useNavigate();
   // const [signup, { isError }] = useSignupMutation();
   return (
@@ -64,23 +64,15 @@ const CreateChannelModal = () => {
                 placeholder="Ivan"
               />
 
-              <MyTextInput
-                label="Password"
-                name="password"
-                type="text"
-                placeholder="**********"
-              />
               {isError && <div>Неверный логин или пароль</div>}
-              <button type="submit">Submit</button>
-              <div>
-                Нет аккаунта? <Link to="/signup">Регистрация</Link>
-              </div>
+
             </Form>
           </Formik>
         </>
       </Modal.Body>
       <Modal.Footer>
-        <Button onClick={props.onHide}>Close</Button>
+        <Button>Отменить</Button>
+        <Button>Отправить</Button>
       </Modal.Footer>
     </Modal>
   );
