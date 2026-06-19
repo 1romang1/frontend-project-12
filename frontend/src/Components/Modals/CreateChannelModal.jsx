@@ -28,7 +28,7 @@ const CreateChannelModal = () => {
   // const navigate = useNavigate();
   // const [signup, { isError }] = useSignupMutation();
   return (
-    <Modal aria-labelledby="contained-modal-title-vcenter" centered>
+    <Modal aria-labelledby="contained-modal-title-vcenter" centered show >
       <Modal.Header closeButton>
         <Modal.Title id="contained-modal-title-vcenter">
           Добавить канал
@@ -46,25 +46,25 @@ const CreateChannelModal = () => {
                 .required("Required")
                 .min(3, "Minimum of 3 characters"),
             })}
-            onSubmit={async (values) => {
-              try {
-                const response = await login(values).unwrap();
-                dispatch(setCredentials(response));
-                navigate("/");
-              } catch (error) {
-                console.error("Login error", error);
-              }
-            }}
+            // onSubmit={async (values) => {
+            //   try {
+            //     const response = await login(values).unwrap();
+            //     dispatch(setCredentials(response));
+            //     navigate("/");
+            //   } catch (error) {
+            //     console.error("Login error", error);
+            //   }
+            // }}
           >
             <Form>
               <MyTextInput
                 label="User Name"
-                name="username"
+                name="name"
                 type="text"
                 placeholder="Ivan"
               />
 
-              {isError && <div>Неверный логин или пароль</div>}
+              {/* {isError && <div>Неверный логин или пароль</div>} */}
 
             </Form>
           </Formik>
