@@ -23,11 +23,15 @@ export const ChannelList = () => {
     }
   }, [isSuccess, channels, dispatch]);
 
+  const handleAddChannel = () => {
+    console.log('oooooooo!')
+    dispatch(openModal({ type: 'create' }));
+  };
   return (
     <div>
       <div class="d-flex mt-1 justify-content-between mb-2 ps-4 pe-2 p-4">
         <b>Каналы</b>
-        <button type="button" class="p-0 text-primary btn btn-group-vertical" onClick={() => dispatch(openModal({ type: 'create' }))}>
+        <button type="button" class="p-0 text-primary btn btn-group-vertical" onClick={handleAddChannel}>
           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" width="20" height="20" fill="currentColor" class="bi bi-plus-square">
             <path d="M14 1a1 1 0 0 1 1 1v12a1 1 0 0 1-1 1H2a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1zM2 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2z">
             </path>
