@@ -1,11 +1,12 @@
 import { useSelector } from "react-redux";
+import CreateChannelModal from "./CreateChannelModal";
 
-const ModalManger = () => {
+const ModalManager = () => {
     const modalType = useSelector(state => state.modal.type);
 
     switch (modalType) {
         case 'create':
-            return <CreateModal />
+            return <CreateChannelModal />
             break;
         case 'rename':
             return <RenameModal />
@@ -18,3 +19,5 @@ const ModalManger = () => {
             break;
     }
 }
+
+export default ModalManager;
