@@ -7,6 +7,7 @@ import { useDispatch } from "react-redux";
 import * as Yup from "yup";
 import { use } from "react";
 import { closeModal, openModal } from "../../store/slices/modalSlice";
+import { useCreateChannelMutation } from "../../api/channelsApi";
 // import { setCredentials } from "../store/slices/authSlice";
 // import { useSignupMutation } from "../api/signupApi";
 
