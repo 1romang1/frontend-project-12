@@ -6,6 +6,7 @@ import { useDispatch } from "react-redux";
 // import { useNavigate } from "react-router-dom";
 import * as Yup from "yup";
 import { use } from "react";
+import { closeModal, openModal } from "../../store/slices/modalSlice";
 // import { setCredentials } from "../store/slices/authSlice";
 // import { useSignupMutation } from "../api/signupApi";
 
@@ -24,11 +25,11 @@ const MyTextInput = ({ label, ...props }) => {
 
 const CreateChannelModal = () => {
   // const modalStatus = useSelector((state) => state.modal.type);
-  // const dispatch = useDispatch();
+  const dispatch = useDispatch();
   // const navigate = useNavigate();
   // const [signup, { isError }] = useSignupMutation();
   return (
-    <Modal aria-labelledby="contained-modal-title-vcenter" centered show >
+    <Modal aria-labelledby="contained-modal-title-vcenter" centered show onHide={()=> dispatch(closeModal())}>
       <Modal.Header closeButton>
         <Modal.Title id="contained-modal-title-vcenter">
           Добавить канал
