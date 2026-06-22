@@ -10,6 +10,10 @@ const modalSlice = createSlice({
         openModal: (state, action) => {
             state.type = action.payload.type;
             state.channelId = action.payload.channelId;
+        },
+        closeModal: (state, action) => {
+            state.type = null;
+            state.channelId = null;
         }
     },
     extraReducers: (builder) => {
