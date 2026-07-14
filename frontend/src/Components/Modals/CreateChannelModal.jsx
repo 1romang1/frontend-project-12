@@ -8,8 +8,7 @@ import * as Yup from "yup";
 import { use } from "react";
 import { closeModal, openModal } from "../../store/slices/modalSlice";
 import { useCreateChannelMutation } from "../../api/channelsApi";
-// import { setCredentials } from "../store/slices/authSlice";
-// import { useSignupMutation } from "../api/signupApi";
+import { setCurrentChannelId } from "../../store/slices/channelsSlice";
 
 const MyTextInput = ({ label, ...props }) => {
   const [field, meta] = useField(props);
@@ -27,8 +26,8 @@ const MyTextInput = ({ label, ...props }) => {
 const CreateChannelModal = () => {
   // const modalStatus = useSelector((state) => state.modal.type);
   const dispatch = useDispatch();
-  // const navigate = useNavigate();
-  // const [signup, { isError }] = useSignupMutation();
+  const [createChannel, {isError}] = useCreateChannelMutation();
+
   return (
     <Modal aria-labelledby="contained-modal-title-vcenter" centered show onHide={()=> dispatch(closeModal())}>
       <Modal.Header closeButton>
@@ -48,17 +47,18 @@ const CreateChannelModal = () => {
                 .required("Required")
                 .min(3, "Minimum of 3 characters"),
             })}
-            // onSubmit={async (values) => {
-            //   try {
-            //     const response = await login(values).unwrap();
-            //     dispatch(setCredentials(response));
-            //     navigate("/");
-            //   } catch (error) {
-            //     console.error("Login error", error);
-            //   }
-            // }}
+            onSubmit={async (values) => {
+              try {
+                const response = await createChannel(values).unwrap();
+                dispatch(setCurrentChannelId(response));
+                // navigate("/");
+console.log(response)
+              } catch (error) {
+                console.error("Login error", error);
+              }
+            }}
           >
-            <Form>
+            <Form id='create-modal-form'>
               <MyTextInput
                 label="User Name"
                 name="name"
@@ -73,8 +73,8 @@ const CreateChannelModal = () => {
         </>
       </Modal.Body>
       <Modal.Footer>
-        <Button>Отменить</Button>
-        <Button>Отправить</Button>
+        <Button variant="secondary">Отменить</Button>
+        <Button type='submit' form='create-modal-form'>Отправить</Button>
       </Modal.Footer>
     </Modal>
   );
