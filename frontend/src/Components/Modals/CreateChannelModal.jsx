@@ -26,10 +26,10 @@ const MyTextInput = ({ label, ...props }) => {
 const CreateChannelModal = () => {
   // const modalStatus = useSelector((state) => state.modal.type);
   const dispatch = useDispatch();
-  const [createChannel, {isError}] = useCreateChannelMutation();
+  const [createChannel, { isError }] = useCreateChannelMutation();
 
   return (
-    <Modal aria-labelledby="contained-modal-title-vcenter" centered show onHide={()=> dispatch(closeModal())}>
+    <Modal aria-labelledby="contained-modal-title-vcenter" centered show onHide={() => dispatch(closeModal())}>
       <Modal.Header closeButton>
         <Modal.Title id="contained-modal-title-vcenter">
           Добавить канал
@@ -50,9 +50,11 @@ const CreateChannelModal = () => {
             onSubmit={async (values) => {
               try {
                 const response = await createChannel(values).unwrap();
-                dispatch(setCurrentChannelId(response));
+                console.log("response:", response);
+                console.log("response.id:", response.id);
+                dispatch(setCurrentChannelId(response.id));
                 // navigate("/");
-console.log(response)
+
               } catch (error) {
                 console.error("Login error", error);
               }
