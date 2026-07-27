@@ -10,10 +10,16 @@ export const connectSocket = () => {
     }
 
     // const SOCKET_URL = import.meta.env.SOCKET_URL || undefined;
-    const SOCKET_URL = "http://localhost:5002";
-    console.log("SOCKET_URL =", SOCKET_URL);
+    // const SOCKET_URL = "http://localhost:5002";
+    // console.log("SOCKET_URL =", SOCKET_URL);
 
-    socket = io(SOCKET_URL, {
+    // socket = io(SOCKET_URL, {
+    //     autoConnect: true,
+    //     reconnection: true,
+    //     reconnectionAttempts: 5,
+    //     reconnectionDelay: 1000,
+    // });
+    socket = io({
         autoConnect: true,
         reconnection: true,
         reconnectionAttempts: 5,
