@@ -26,8 +26,11 @@ export const socketMiddleware = (store) => {
     };
 
     return (next) => (action) => {
+         console.log("ACTION:", action.type);
         if (action.type === "auth/setCredentials" && !isInitialized) {
+            console.log("ENTER IF");
             const socket = connectSocket();
+             console.log("AFTER connectSocket");
             isInitialized = true;
 
             onSocketEvent('newMessage', (message) => {
@@ -58,6 +61,7 @@ export const socketMiddleware = (store) => {
             });
 
             onSocketEvent('newChannel', (channel) => {
+                console.log('SOCKET newChannel:', channel);
                 updateChannels((draft) => {
                     draft.push(channel);
                 });

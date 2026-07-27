@@ -7,7 +7,7 @@ import { MessageInput } from "./MessageInput";
 export const MessagesList = () => {
   const { data: messages = [] } = useGetMessagesQuery();
   const { data: channels = [], isSuccess } = useGetChannelsQuery();
-
+console.log("channels:", channels);
   const currentChannelId = useSelector(
     (state) => state.channels.currentChannelId,
   );

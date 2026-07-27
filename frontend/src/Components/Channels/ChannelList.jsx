@@ -11,17 +11,24 @@ export const ChannelList = () => {
   const dispatch = useDispatch();
 
   const currentChannelId = useSelector((state) => state.channels.currentChannelId);
+  console.log({
+  currentChannelId,
+  currentChannelIdType: typeof currentChannelId,
+  channelId: channels[0]?.id,
+  channelIdType: typeof channels[0]?.id,
+  // messageChannelId: messages[0]?.channelId,
+  // messageChannelIdType: typeof messages[0]?.channelId,
+});
 
   useEffect(() => {
-    const generalChannel = channels.find(channel => channel.name === 'general');
-
-    if (isSuccess && channels.length > 0 && currentChannelId === undefined) {
-      dispatch(setCurrentChannelId({ id: generalChannel.id }));
+    if (
+      isSuccess &&
+      channels.length > 0 &&
+      currentChannelId == null
+    ) {
+      dispatch(setCurrentChannelId(channels[0].id));
     }
-    if (isSuccess && channels.length > 0) {
-      dispatch(setCurrentChannelId({ id: channels[0].id }));
-    }
-  }, [isSuccess, channels, dispatch]);
+  }, [isSuccess, channels, currentChannelId, dispatch]);
 
   const handleAddChannel = () => {
     console.log('oooooooo!')
