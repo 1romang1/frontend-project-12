@@ -1,7 +1,8 @@
 import { useSelector } from "react-redux";
 import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
-import { Formik, Form, useField } from "formik";
+import Form from 'react-bootstrap/Form'
+import { Formik, Form as FormikForm, useField } from "formik";
 import { useDispatch } from "react-redux";
 // import { useNavigate } from "react-router-dom";
 import * as Yup from "yup";
@@ -60,17 +61,15 @@ const CreateChannelModal = () => {
               }
             }}
           >
-            <Form id='create-modal-form'>
+            <FormikForm id='create-modal-form'>
               <MyTextInput
-                label="User Name"
                 name="name"
                 type="text"
-                placeholder="Ivan"
               />
 
               {/* {isError && <div>Неверный логин или пароль</div>} */}
 
-            </Form>
+            </FormikForm>
           </Formik>
         </>
       </Modal.Body>
