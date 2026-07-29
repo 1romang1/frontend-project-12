@@ -9,19 +9,6 @@ import { closeModal, openModal } from "../../store/slices/modalSlice";
 import { useCreateChannelMutation } from "../../api/channelsApi";
 import { setCurrentChannelId } from "../../store/slices/channelsSlice";
 
-const MyTextInput = ({ label, ...props }) => {
-  const [field, meta] = useField(props);
-  return (
-    <>
-      <label htmlFor={props.id || props.name}>{label}</label>
-      <input className="text-input" {...field} {...props} />
-      {meta.touched && meta.error ? (
-        <div className="error">{meta.error}</div>
-      ) : null}
-    </>
-  );
-};
-
 const CreateChannelModal = () => {
   // const modalStatus = useSelector((state) => state.modal.type);
   const dispatch = useDispatch();
@@ -49,25 +36,36 @@ const CreateChannelModal = () => {
             onSubmit={async (values) => {
               try {
                 const response = await createChannel(values).unwrap();
-                console.log("response:", response);
-                console.log("response.id:", response.id);
                 dispatch(setCurrentChannelId(response.id));
-                // navigate("/");
-
               } catch (error) {
                 console.error("Login error", error);
               }
             }}
           >
-            <FormikForm id='create-modal-form'>
-              <MyTextInput
-                name="name"
-                type="text"
-              />
-
-              {/* {isError && <div>Неверный логин или пароль</div>} */}
-
-            </FormikForm>
+            {({
+              values,
+              errors,
+              touched,
+              handleChange,
+              handleBlur,
+            }) => (
+              <FormikForm id='create-modal-form'>
+                <Form.Group controlId='name' className="mb-3">
+                  <Form.Control
+                    name='name'
+                    type='text'
+                    value={values.name}
+                    onChange={handleChange}
+                    onBlur={handleBlur}
+                    autoFocus
+                    isInvalid={touched.name && !!errors.name}
+                  />
+                  <Form.Control.Feedback type="invalid">
+                    {errors.name}
+                  </Form.Control.Feedback>
+                </Form.Group>
+              </FormikForm>
+            )}
           </Formik>
         </>
       </Modal.Body>
