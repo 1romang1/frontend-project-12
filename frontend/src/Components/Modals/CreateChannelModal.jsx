@@ -2,11 +2,9 @@ import { useSelector } from "react-redux";
 import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
 import Form from 'react-bootstrap/Form'
-import { Formik, Form as FormikForm, useField } from "formik";
+import { Formik, Form as FormikForm } from "formik";
 import { useDispatch } from "react-redux";
-// import { useNavigate } from "react-router-dom";
 import * as Yup from "yup";
-import { use } from "react";
 import { closeModal, openModal } from "../../store/slices/modalSlice";
 import { useCreateChannelMutation } from "../../api/channelsApi";
 import { setCurrentChannelId } from "../../store/slices/channelsSlice";
