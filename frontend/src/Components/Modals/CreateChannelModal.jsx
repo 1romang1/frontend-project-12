@@ -8,14 +8,22 @@ import * as Yup from "yup";
 import { closeModal, openModal } from "../../store/slices/modalSlice";
 import { useCreateChannelMutation } from "../../api/channelsApi";
 import { setCurrentChannelId } from "../../store/slices/channelsSlice";
+import { useRef } from "react";
+
+
 
 const CreateChannelModal = () => {
+  const inputRef = useRef(null);
   // const modalStatus = useSelector((state) => state.modal.type);
   const dispatch = useDispatch();
   const [createChannel, { isError }] = useCreateChannelMutation();
 
   return (
-    <Modal aria-labelledby="contained-modal-title-vcenter" centered show onHide={() => dispatch(closeModal())}>
+    <Modal aria-labelledby="contained-modal-title-vcenter"
+    centered
+    show
+    onHide={() => dispatch(closeModal())}
+    onEntered={() => inputRef.current?.focus()}>
       <Modal.Header closeButton>
         <Modal.Title id="contained-modal-title-vcenter">
           Добавить канал
@@ -49,30 +57,48 @@ const CreateChannelModal = () => {
               handleChange,
               handleBlur,
             }) => (
+
               <FormikForm id='create-modal-form'>
                 <Form.Group controlId='name' className="mb-3">
+
                   <Form.Control
+                  ref={inputRef}
                     name='name'
                     type='text'
                     value={values.name}
                     onChange={handleChange}
-                    onBlur={handleBlur}
-                    autoFocus
+                    onFocus={() => console.log("FOCUS")}
+                    onBlur={(e) => {
+                      console.log("BLUR");
+                      handleBlur(e);
+                    }}
                     isInvalid={touched.name && !!errors.name}
                   />
                   <Form.Control.Feedback type="invalid">
                     {errors.name}
                   </Form.Control.Feedback>
                 </Form.Group>
+                <div className="d-flex justify-content-end gap-2">
+                  <Button
+                    variant="secondary"
+                    onClick={() => dispatch(closeModal())}
+                  >
+                    Отменить
+                  </Button>
+
+                  <Button type="submit">
+                    Отправить
+                  </Button>
+                </div>
               </FormikForm>
             )}
           </Formik>
         </>
       </Modal.Body>
-      <Modal.Footer>
+      {/* <Modal.Footer>
         <Button variant="secondary">Отменить</Button>
         <Button type='submit' form='create-modal-form'>Отправить</Button>
-      </Modal.Footer>
+      </Modal.Footer> */}
     </Modal>
   );
 };
