@@ -1,6 +1,7 @@
 import { Container, Row, Col } from "react-bootstrap";
 import { ChannelList } from "../Channels/ChannelList";
 import { MessagesList } from "../Messages/MessagesList";
+import ModalManager from "../Modals/ModalManager";
 
 const MainPage = () => {
   return (
@@ -22,6 +23,7 @@ const MainPage = () => {
                 </Col>
               </Row>
             </Container>
+            <ModalManager />
           </div>
         </div>
       </div>

@@ -5,7 +5,7 @@ const ChannelItem = ({ channel }) => {
   const dispatch = useDispatch();
 
   const handleClick = () => {
-    dispatch(setCurrentChannelId({id: channel.id}));
+    dispatch(setCurrentChannelId(channel.id));
     console.log("CLICK", channel.id);
   };
 

@@ -21,7 +21,7 @@ export const MessageInput = () => {
       try {
         await sendMessage({
           body: trimmedValues,
-          channelsId: currentChannelId,
+          channelId: currentChannelId,
           username,
         }).unwrap();
         
