@@ -4,6 +4,7 @@ import { useMutation } from '@tanstack/react-query';
 import { useTranslation } from 'react-i18next';
 import { Link, Navigate, useNavigate } from 'react-router-dom';
 import { api } from '../api/client.js';
+import { notifyRequestError } from '../services/toasts.js';
 import { useAuthStore } from '../store/auth.js';
 import { toSignupCredentials, validateSignup } from '../utils/signup.js';
 
@@ -27,6 +28,8 @@ export default function SignupPage() {
     onError: (error) => {
       if (error.status === 409) {
         form.setFieldError('username', t('signup.duplicateField'));
+      } else {
+        notifyRequestError(error, 'signup.failed');
       }
     },
   });

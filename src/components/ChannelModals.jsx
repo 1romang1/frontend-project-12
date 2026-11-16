@@ -4,6 +4,7 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useTranslation } from 'react-i18next';
 import { api } from '../api/client.js';
 import { handleChannelRemoval } from '../services/channelCache.js';
+import { notifyChannelSuccess, notifyRequestError } from '../services/toasts.js';
 import { useUiStore } from '../store/ui.js';
 import { validateChannelName } from '../utils/channels.js';
 
@@ -31,7 +32,12 @@ function ChannelNameModal({ type, channels, channel, onCreated }) {
         selectChannel(result.id);
         onCreated?.();
       }
+      notifyChannelSuccess(isCreate ? 'created' : 'renamed', result.name);
       closeModal();
+    },
+    onError: (error) => {
+      // HTTP 409 is a validation error already displayed in the modal.
+      if (error?.status !== 409) notifyRequestError(error, 'channels.saveFailed');
     },
   });
 
@@ -87,8 +93,10 @@ function RemoveChannelModal({ channel }) {
     mutationFn: api.removeChannel,
     onSuccess: () => {
       handleChannelRemoval(queryClient, channel.id);
+      notifyChannelSuccess('removed', channel.name);
       closeModal();
     },
+    onError: (error) => notifyRequestError(error, 'channels.removeFailed'),
   });
   return (
     <Modal

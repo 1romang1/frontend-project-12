@@ -7,6 +7,7 @@ import SignupPage from './pages/SignupPage.jsx';
 import ChatPage from './pages/ChatPage.jsx';
 import NotFoundPage from './pages/NotFoundPage.jsx';
 import '@mantine/core/styles.css';
+import '@mantine/notifications/styles.css';
 
 function ProtectedRoute({ children }) {
   const token = useAuthStore((state) => state.token);
