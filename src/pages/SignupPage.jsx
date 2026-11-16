@@ -4,17 +4,17 @@ import { useMutation } from '@tanstack/react-query';
 import { Link, Navigate, useNavigate } from 'react-router-dom';
 import { api } from '../api/client.js';
 import { useAuthStore } from '../store/auth.js';
+import { toSignupCredentials, validateSignup } from '../utils/signup.js';
 
 export default function SignupPage() {
   const token = useAuthStore((state) => state.token);
   const login = useAuthStore((state) => state.login);
   const navigate = useNavigate();
   const form = useForm({
-    initialValues: { username: '', password: '' },
-    validate: {
-      username: (value) => value.trim().length >= 3 ? null : 'Минимум 3 символа',
-      password: (value) => value.length >= 6 ? null : 'Минимум 6 символов',
-    },
+    mode: 'uncontrolled',
+    initialValues: { username: '', password: '', confirmPassword: '' },
+    validate: validateSignup,
+    validateInputOnBlur: true,
   });
   const mutation = useMutation({
     mutationFn: api.signup,
@@ -22,26 +22,59 @@ export default function SignupPage() {
       login(session);
       navigate('/', { replace: true });
     },
+    onError: (error) => {
+      if (error.status === 409) {
+        form.setFieldError('username', 'Это имя пользователя уже занято');
+      }
+    },
   });
 
   if (token) return <Navigate to="/" replace />;
 
   return (
-    <Container size={420} py={80}>
+    <Container size={420} py={64}>
       <Stack gap="lg">
-        <Title ta="center">Hexlet Chat</Title>
         <Paper withBorder radius="md" p="xl">
-          <form onSubmit={form.onSubmit((values) => mutation.mutate(values))}>
+          <form onSubmit={form.onSubmit((values) => {
+            if (!mutation.isPending) mutation.mutate(toSignupCredentials(values));
+          })}>
             <Stack>
               <Title order={3}>Регистрация</Title>
-              <TextInput label="Имя пользователя" required autoComplete="username" {...form.getInputProps('username')} />
-              <PasswordInput label="Пароль" required autoComplete="new-password" {...form.getInputProps('password')} />
+              <TextInput
+                label="Имя пользователя"
+                required
+                autoFocus
+                autoComplete="username"
+                disabled={mutation.isPending}
+                key={form.key('username')}
+                {...form.getInputProps('username')}
+              />
+              <PasswordInput
+                label="Пароль"
+                required
+                autoComplete="new-password"
+                disabled={mutation.isPending}
+                key={form.key('password')}
+                {...form.getInputProps('password')}
+              />
+              <PasswordInput
+                label="Подтверждение пароля"
+                required
+                autoComplete="new-password"
+                disabled={mutation.isPending}
+                key={form.key('confirmPassword')}
+                {...form.getInputProps('confirmPassword')}
+              />
               {mutation.isError && (
                 <Alert color="red" role="alert">
-                  {mutation.error?.status === 409 ? 'Это имя уже занято' : 'Не удалось зарегистрироваться. Попробуйте ещё раз.'}
+                  {mutation.error?.status === 409
+                    ? 'Пользователь с таким именем уже существует'
+                    : 'Не удалось зарегистрироваться. Проверьте соединение и попробуйте ещё раз.'}
                 </Alert>
               )}
-              <Button type="submit" loading={mutation.isPending}>Создать аккаунт</Button>
+              <Button type="submit" loading={mutation.isPending} fullWidth>
+                Зарегистрироваться
+              </Button>
             </Stack>
           </form>
         </Paper>

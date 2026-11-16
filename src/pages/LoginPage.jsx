@@ -27,9 +27,8 @@ export default function LoginPage() {
   if (token) return <Navigate to="/" replace />;
 
   return (
-    <Container size={420} py={80}>
+    <Container size={420} py={64}>
       <Stack gap="lg">
-        <Title ta="center">Hexlet Chat</Title>
         <Paper withBorder shadow="sm" radius="md" p="xl">
           <form onSubmit={form.onSubmit((values) => mutation.mutate(values))}>
             <Stack>
