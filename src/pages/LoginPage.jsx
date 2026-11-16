@@ -42,7 +42,7 @@ export default function LoginPage() {
             <Stack>
               <Title order={3}>{t('login.title')}</Title>
               <TextInput label={t('login.username')} autoComplete="username" required {...form.getInputProps('username')} />
-              <PasswordInput label={t('common.password')} autoComplete="current-password" required {...form.getInputProps('password')} />
+              <PasswordInput label={t('common.password')} aria-label={t('common.password')} autoComplete="current-password" required withAsterisk={false} {...form.getInputProps('password')} />
               {mutation.isError && (
                 <Alert color="red" role="alert">
                   {mutation.error?.status === 401 ? t('login.invalidCredentials') : t('login.failed')}
