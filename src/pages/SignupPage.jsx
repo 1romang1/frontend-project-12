@@ -3,20 +3,22 @@ import { useForm } from '@mantine/form';
 import { useMutation } from '@tanstack/react-query';
 import { useTranslation } from 'react-i18next';
 import { Link, Navigate, useNavigate } from 'react-router-dom';
-import { api } from '../api/client.js';
-import { notifyRequestError } from '../services/toasts.js';
+import { useApi } from '../api/client.js';
+import { useToasts } from '../services/toastsContext.js';
 import { useAuthStore } from '../store/auth.js';
 import { toSignupCredentials, validateSignup } from '../utils/signup.js';
 
 export default function SignupPage() {
   const { t } = useTranslation();
+  const api = useApi();
+  const { notifyRequestError } = useToasts();
   const token = useAuthStore((state) => state.token);
   const login = useAuthStore((state) => state.login);
   const navigate = useNavigate();
   const form = useForm({
     mode: 'uncontrolled',
     initialValues: { username: '', password: '', confirmPassword: '' },
-    validate: validateSignup,
+    validate: (values) => validateSignup(values, t),
     validateInputOnBlur: true,
   });
   const mutation = useMutation({

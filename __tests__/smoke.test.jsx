@@ -3,10 +3,10 @@ import { renderToString } from 'react-dom/server';
 import init from '../src/init.jsx';
 
 describe('Hexlet Chat entry point', () => {
-  test('init takes an injected socket, subscribes to events and returns React markup', async () => {
+  test('init takes an injected socket and returns React markup', async () => {
     const socket = { on: vi.fn() };
     const markup = renderToString(await init(socket));
     expect(markup).toContain('Hexlet Chat');
-    expect(socket.on).toHaveBeenCalledWith('newMessage', expect.any(Function));
+    // Socket listeners are registered after mounting, and removed on unmount.
   });
 });

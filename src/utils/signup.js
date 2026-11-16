@@ -1,26 +1,26 @@
-import i18n from '../i18n.js';
+import { translateRu } from './translate.js';
 
 // Client-side validation only. The server remains the final authority.
-export function validateSignup({ username = '', password = '', confirmPassword = '' }) {
+export function validateSignup({ username = '', password = '', confirmPassword = '' }, t = translateRu) {
   const errors = {};
   const normalizedName = username.trim();
 
   if (!normalizedName) {
-    errors.username = i18n.t('validation.usernameRequired');
+    errors.username = t('validation.usernameRequired');
   } else if (normalizedName.length < 3 || normalizedName.length > 20) {
-    errors.username = i18n.t('validation.usernameLength');
+    errors.username = t('validation.usernameLength');
   }
 
   if (!password) {
-    errors.password = i18n.t('validation.passwordRequired');
+    errors.password = t('validation.passwordRequired');
   } else if (password.length < 6) {
-    errors.password = i18n.t('validation.passwordLength');
+    errors.password = t('validation.passwordLength');
   }
 
   if (!confirmPassword) {
-    errors.confirmPassword = i18n.t('validation.confirmPasswordRequired');
+    errors.confirmPassword = t('validation.confirmPasswordRequired');
   } else if (password !== confirmPassword) {
-    errors.confirmPassword = i18n.t('validation.passwordsMismatch');
+    errors.confirmPassword = t('validation.passwordsMismatch');
   }
 
   return errors;

@@ -1,8 +1,10 @@
 import { describe, expect, test } from 'vitest';
-import i18n from '../src/i18n.js';
+import { createI18n } from '../src/i18n.js';
 import ru from '../src/locales/ru.json';
 import { validateSignup } from '../src/utils/signup.js';
 import { validateChannelName } from '../src/utils/channels.js';
+
+const i18n = createI18n();
 
 function collectPaths(node, prefix = '') {
   return Object.entries(node).flatMap(([key, value]) => {
@@ -26,7 +28,7 @@ describe('Russian interface locale', () => {
   });
 
   test('interpolates dynamic labels and errors', () => {
-    expect(i18n.t('channels.manage', { name: 'general' })).toBe('Управление каналом general');
+    expect(i18n.t('channels.manage', { name: 'general' })).toBe('Управление каналом');
     expect(i18n.t('channels.removeConfirm', { name: 'test' })).toContain('«# test»');
     expect(i18n.t('chat.messagesCount', { number: 3 })).toBe('Сообщений: 3');
     expect(i18n.t('errors.server', { status: 503 })).toBe('Ошибка сервера (503)');

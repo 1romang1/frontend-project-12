@@ -1,7 +1,7 @@
 import { beforeEach, describe, expect, test, vi } from 'vitest';
 import { validateChannelName, getDefaultChannelId } from '../src/utils/channels.js';
 import { subscribeToChatEvents } from '../src/services/socketEvents.js';
-import { useUiStore } from '../src/store/ui.js';
+import { createUiStore } from '../src/store/ui.js';
 
 const channels = [
   { id: '1', name: 'general', removable: false },
@@ -29,8 +29,9 @@ describe('channel validation', () => {
 });
 
 describe('WebSocket channel operations', () => {
+  let uiStore;
   beforeEach(() => {
-    useUiStore.setState({ currentChannelId: null, modal: null, modalChannelId: null });
+    uiStore = createUiStore();
   });
 
   function fakeClient() {
@@ -49,15 +50,15 @@ describe('WebSocket channel operations', () => {
       },
       invalidateQueries: vi.fn().mockResolvedValue(undefined),
     };
-    subscribeToChatEvents({ on: (name, handler) => { events[name] = handler; } }, queryClient);
+    subscribeToChatEvents({ on: (name, handler) => { events[name] = handler; } }, queryClient, uiStore);
     return { events, data, queryClient };
   }
 
   test('removal moves users to general and clears the removed channel messages', () => {
     const { events, data, queryClient } = fakeClient();
-    useUiStore.getState().selectChannel('3');
+    uiStore.getState().selectChannel('3');
     events.removeChannel({ id: '3' });
-    expect(useUiStore.getState().currentChannelId).toBe('1');
+    expect(uiStore.getState().currentChannelId).toBe('1');
     expect(data.get('channels').map(({ id }) => id)).toEqual(['1', '2']);
     expect(data.get('messages').map(({ id }) => id)).toEqual(['m1']);
     expect(queryClient.invalidateQueries).toHaveBeenCalledWith({ queryKey: ['messages'] });

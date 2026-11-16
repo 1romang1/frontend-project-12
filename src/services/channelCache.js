@@ -1,8 +1,7 @@
 import { getDefaultChannelId } from '../utils/channels.js';
-import { useUiStore } from '../store/ui.js';
 
 // Reconcile a removed channel for both the actor and other connected users.
-export function handleChannelRemoval(queryClient, removedId) {
+export function handleChannelRemoval(queryClient, removedId, uiStore) {
   const channels = queryClient.getQueryData(['channels']) ?? [];
   const fallbackId = getDefaultChannelId(channels, removedId);
 
@@ -13,7 +12,7 @@ export function handleChannelRemoval(queryClient, removedId) {
     old?.filter(({ channelId }) => channelId !== removedId) ?? old
   );
 
-  const ui = useUiStore.getState();
+  const ui = uiStore.getState();
   if (ui.currentChannelId === removedId) ui.selectChannel(fallbackId);
   if (ui.modalChannelId === removedId) ui.closeModal();
 

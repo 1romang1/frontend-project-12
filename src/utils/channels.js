@@ -1,17 +1,17 @@
 import { hasLength } from '@mantine/form';
-import i18n from '../i18n.js';
+import { translateRu } from './translate.js';
 
 export const normalizedChannelName = (name) => name.trim().toLocaleLowerCase();
 
-export function validateChannelName(value, channels, exceptId = null) {
+export function validateChannelName(value, channels, exceptId = null, t = translateRu) {
   const name = value.trim();
-  const lengthError = hasLength({ min: 3, max: 20 }, i18n.t('validation.channelLength'))(name);
+  const lengthError = hasLength({ min: 3, max: 20 }, t('validation.channelLength'))(name);
   if (lengthError) return lengthError;
 
   const duplicate = channels.some((channel) =>
     channel.id !== exceptId && normalizedChannelName(channel.name) === normalizedChannelName(name)
   );
-  return duplicate ? i18n.t('validation.channelDuplicate') : null;
+  return duplicate ? t('validation.channelDuplicate') : null;
 }
 
 export function getDefaultChannelId(channels = [], removedId = null) {

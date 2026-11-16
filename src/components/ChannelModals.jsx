@@ -2,14 +2,16 @@ import { Alert, Button, Group, Modal, Stack, Text, TextInput } from '@mantine/co
 import { useForm } from '@mantine/form';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useTranslation } from 'react-i18next';
-import { api } from '../api/client.js';
+import { useApi } from '../api/client.js';
 import { handleChannelRemoval } from '../services/channelCache.js';
-import { notifyChannelSuccess, notifyRequestError } from '../services/toasts.js';
-import { useUiStore } from '../store/ui.js';
+import { useToasts } from '../services/toastsContext.js';
+import { useUiStore, useUiStoreApi } from '../store/ui.js';
 import { validateChannelName } from '../utils/channels.js';
 
 function ChannelNameModal({ type, channels, channel, onCreated }) {
   const { t } = useTranslation();
+  const api = useApi();
+  const { notifyChannelSuccess, notifyRequestError } = useToasts();
   const queryClient = useQueryClient();
   const selectChannel = useUiStore((state) => state.selectChannel);
   const closeModal = useUiStore((state) => state.closeModal);
@@ -18,7 +20,7 @@ function ChannelNameModal({ type, channels, channel, onCreated }) {
     mode: 'uncontrolled',
     initialValues: { name: isCreate ? '' : channel?.name ?? '' },
     validate: {
-      name: (value) => validateChannelName(value, channels, isCreate ? null : channel?.id),
+      name: (value) => validateChannelName(value, channels, isCreate ? null : channel?.id, t),
     },
   });
   const mutation = useMutation({
@@ -87,12 +89,15 @@ function ChannelNameModal({ type, channels, channel, onCreated }) {
 
 function RemoveChannelModal({ channel }) {
   const { t } = useTranslation();
+  const api = useApi();
+  const { notifyChannelSuccess, notifyRequestError } = useToasts();
+  const uiStore = useUiStoreApi();
   const queryClient = useQueryClient();
   const closeModal = useUiStore((state) => state.closeModal);
   const mutation = useMutation({
     mutationFn: api.removeChannel,
     onSuccess: () => {
-      handleChannelRemoval(queryClient, channel.id);
+      handleChannelRemoval(queryClient, channel.id, uiStore);
       notifyChannelSuccess('removed', channel.name);
       closeModal();
     },

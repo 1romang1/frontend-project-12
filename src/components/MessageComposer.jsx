@@ -2,12 +2,14 @@ import { Alert, Button, Group, Stack, TextInput } from '@mantine/core';
 import { useForm } from '@mantine/form';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useTranslation } from 'react-i18next';
-import { api } from '../api/client.js';
-import { notifyRequestError } from '../services/toasts.js';
+import { useApi } from '../api/client.js';
+import { useToasts } from '../services/toastsContext.js';
 import { useAuthStore } from '../store/auth.js';
 
 export default function MessageComposer({ channelId }) {
   const { t } = useTranslation();
+  const api = useApi();
+  const { notifyRequestError } = useToasts();
   const queryClient = useQueryClient();
   const username = useAuthStore((state) => state.username);
   const form = useForm({

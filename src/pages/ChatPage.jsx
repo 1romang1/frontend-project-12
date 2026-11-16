@@ -4,7 +4,7 @@ import { useDisclosure } from '@mantine/hooks';
 import { useQuery } from '@tanstack/react-query';
 import { useTranslation } from 'react-i18next';
 import useLogout from '../hooks/useLogout.js';
-import { api } from '../api/client.js';
+import { useApi } from '../api/client.js';
 import AppHeader from '../components/AppHeader.jsx';
 import ChannelSidebar from '../components/ChannelSidebar.jsx';
 import MessageComposer from '../components/MessageComposer.jsx';
@@ -15,6 +15,7 @@ import { censorProfanity } from '../utils/profanity.js';
 
 export default function ChatPage() {
   const { t } = useTranslation();
+  const api = useApi();
   const [mobileOpened, { toggle, close }] = useDisclosure(false);
   const token = useAuthStore((state) => state.token);
   const channelId = useUiStore((state) => state.currentChannelId);
