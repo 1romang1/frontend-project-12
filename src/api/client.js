@@ -1,4 +1,5 @@
 import i18n from '../i18n.js';
+import { censorProfanity } from '../utils/profanity.js';
 import { useAuthStore } from '../store/auth.js';
 
 export async function request(method, path, body) {
@@ -26,8 +27,8 @@ export const api = {
   signup: (credentials) => request('POST', '/signup', credentials),
   channels: () => request('GET', '/channels'),
   messages: () => request('GET', '/messages'),
-  createChannel: (channel) => request('POST', '/channels', channel),
-  renameChannel: ({ id, name }) => request('PATCH', `/channels/${id}`, { name }),
+  createChannel: (channel) => request('POST', '/channels', { ...channel, name: censorProfanity(channel.name) }),
+  renameChannel: ({ id, name }) => request('PATCH', `/channels/${id}`, { name: censorProfanity(name) }),
   removeChannel: (id) => request('DELETE', `/channels/${id}`),
-  sendMessage: (message) => request('POST', '/messages', message),
+  sendMessage: (message) => request('POST', '/messages', { ...message, body: censorProfanity(message.body) }),
 };
