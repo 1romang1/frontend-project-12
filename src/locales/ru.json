@@ -72,5 +72,15 @@
   },
   "errors": {
     "server": "Ошибка сервера ({{status}})"
+  },
+  "notifications": {
+    "errorTitle": "Ошибка",
+    "successTitle": "Готово",
+    "offline": "Нет подключения к интернету. Проверьте сеть.",
+    "connectionFailed": "Не удалось связаться с сервером. Проверьте подключение к сети.",
+    "loadFailed": "Не удалось загрузить данные чата. Повторите попытку.",
+    "channelCreated": "Канал «# {{name}}» создан",
+    "channelRenamed": "Канал «# {{name}}» переименован",
+    "channelRemoved": "Канал «# {{name}}» удалён"
   }
 }

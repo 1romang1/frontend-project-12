@@ -3,6 +3,7 @@ import { useForm } from '@mantine/form';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useTranslation } from 'react-i18next';
 import { api } from '../api/client.js';
+import { notifyRequestError } from '../services/toasts.js';
 import { useAuthStore } from '../store/auth.js';
 
 export default function MessageComposer({ channelId }) {
@@ -21,6 +22,7 @@ export default function MessageComposer({ channelId }) {
       );
       form.reset();
     },
+    onError: (error) => notifyRequestError(error, 'chat.sendFailed'),
   });
 
   return (

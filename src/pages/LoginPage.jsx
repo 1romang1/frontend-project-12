@@ -4,6 +4,7 @@ import { useMutation } from '@tanstack/react-query';
 import { useTranslation } from 'react-i18next';
 import { Link, Navigate, useNavigate } from 'react-router-dom';
 import { api } from '../api/client.js';
+import { notifyRequestError } from '../services/toasts.js';
 import { useAuthStore } from '../store/auth.js';
 
 export default function LoginPage() {
@@ -23,6 +24,9 @@ export default function LoginPage() {
     onSuccess: (session) => {
       login(session);
       navigate('/', { replace: true });
+    },
+    onError: (error) => {
+      if (error?.status !== 401) notifyRequestError(error, 'login.failed');
     },
   });
 
