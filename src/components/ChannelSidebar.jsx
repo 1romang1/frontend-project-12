@@ -28,8 +28,9 @@ export default function ChannelSidebar({ channels, onSelect }) {
                   onSelect?.();
                 }}
                 title={`# ${channel.name}`}
+                aria-label={`# ${channel.name}`}
               >
-                <Text span truncate># {channel.name}</Text>
+                <Text span truncate>#{channel.name}</Text>
               </Button>
               {channel.removable && (
                 <Menu shadow="md" position="bottom-end" withinPortal>

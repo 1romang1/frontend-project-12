@@ -58,7 +58,9 @@ export default function SignupPage() {
               />
               <PasswordInput
                 label={t('common.password')}
+                aria-label={t('common.password')}
                 required
+                withAsterisk={false}
                 autoComplete="new-password"
                 disabled={mutation.isPending}
                 key={form.key('password')}
@@ -66,7 +68,9 @@ export default function SignupPage() {
               />
               <PasswordInput
                 label={t('signup.confirmPassword')}
+                aria-label={t('signup.confirmPassword')}
                 required
+                withAsterisk={false}
                 autoComplete="new-password"
                 disabled={mutation.isPending}
                 key={form.key('confirmPassword')}
