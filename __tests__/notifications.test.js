@@ -1,11 +1,20 @@
-import { afterEach, describe, expect, test, vi } from 'vitest';
+import { afterEach, beforeEach, describe, expect, test, vi } from 'vitest';
 import { notifications } from '@mantine/notifications';
-import i18n from '../src/i18n.js';
-import { dismissOffline, notifyChannelSuccess, notifyOffline, notifyRequestError } from '../src/services/toasts.js';
+import { createI18n } from '../src/i18n.js';
+import { createToasts } from '../src/services/toasts.js';
 
 vi.mock('@mantine/notifications', () => ({
   notifications: { show: vi.fn(), hide: vi.fn() },
 }));
+
+let dismissOffline;
+let notifyChannelSuccess;
+let notifyOffline;
+let notifyRequestError;
+const i18n = createI18n();
+beforeEach(() => {
+  ({ dismissOffline, notifyChannelSuccess, notifyOffline, notifyRequestError } = createToasts(i18n));
+});
 
 afterEach(() => {
   vi.clearAllMocks();

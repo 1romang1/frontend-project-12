@@ -13,7 +13,7 @@ export default function ChannelSidebar({ channels, onSelect }) {
     <>
       <Group justify="space-between" mb="md" wrap="nowrap">
         <Text fw={700}>{t('channels.title')}</Text>
-        <Button size="compact-sm" variant="light" aria-label={t('channels.add')} onClick={() => openModal('create')}>+</Button>
+        <Button size="compact-sm" variant="light" aria-label={t('channels.plus')} title={t('channels.add')} onClick={() => openModal('create')}>{t('channels.plus')}</Button>
       </Group>
       <ScrollArea h="calc(100dvh - 190px)" type="auto" offsetScrollbars>
         <Stack gap={4}>

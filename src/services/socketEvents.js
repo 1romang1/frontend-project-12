@@ -1,7 +1,6 @@
 import { handleChannelRemoval } from './channelCache.js';
 
-// Socket is injected by init; do not open a second connection here.
-export function subscribeToChatEvents(socket, queryClient) {
+export function subscribeToChatEvents(socket, queryClient, uiStore) {
   const updateList = (key, item, operation) => {
     queryClient.setQueryData([key], (old) => {
       if (!old) return old;
@@ -13,10 +12,16 @@ export function subscribeToChatEvents(socket, queryClient) {
     });
   };
 
-  socket.on('newMessage', (message) => updateList('messages', message, 'add'));
-  socket.on('renameMessage', (message) => updateList('messages', message, 'rename'));
-  socket.on('removeMessage', (message) => updateList('messages', message, 'remove'));
-  socket.on('newChannel', (channel) => updateList('channels', channel, 'add'));
-  socket.on('renameChannel', (channel) => updateList('channels', channel, 'rename'));
-  socket.on('removeChannel', ({ id }) => handleChannelRemoval(queryClient, id));
+  const handlers = [
+    ['newMessage', (message) => updateList('messages', message, 'add')],
+    ['renameMessage', (message) => updateList('messages', message, 'rename')],
+    ['removeMessage', (message) => updateList('messages', message, 'remove')],
+    ['newChannel', (channel) => updateList('channels', channel, 'add')],
+    ['renameChannel', (channel) => updateList('channels', channel, 'rename')],
+    ['removeChannel', ({ id }) => handleChannelRemoval(queryClient, id, uiStore)],
+  ];
+  for (const [event, handler] of handlers) socket.on(event, handler);
+  return () => {
+    for (const [event, handler] of handlers) socket.off?.(event, handler);
+  };
 }

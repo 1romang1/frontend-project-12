@@ -3,12 +3,14 @@ import { useForm } from '@mantine/form';
 import { useMutation } from '@tanstack/react-query';
 import { useTranslation } from 'react-i18next';
 import { Link, Navigate, useNavigate } from 'react-router-dom';
-import { api } from '../api/client.js';
-import { notifyRequestError } from '../services/toasts.js';
+import { useApi } from '../api/client.js';
+import { useToasts } from '../services/toastsContext.js';
 import { useAuthStore } from '../store/auth.js';
 
 export default function LoginPage() {
   const { t } = useTranslation();
+  const api = useApi();
+  const { notifyRequestError } = useToasts();
   const navigate = useNavigate();
   const token = useAuthStore((state) => state.token);
   const login = useAuthStore((state) => state.login);
@@ -39,7 +41,7 @@ export default function LoginPage() {
           <form onSubmit={form.onSubmit((values) => mutation.mutate(values))}>
             <Stack>
               <Title order={3}>{t('login.title')}</Title>
-              <TextInput label={t('common.username')} autoComplete="username" required {...form.getInputProps('username')} />
+              <TextInput label={t('login.username')} autoComplete="username" required {...form.getInputProps('username')} />
               <PasswordInput label={t('common.password')} autoComplete="current-password" required {...form.getInputProps('password')} />
               {mutation.isError && (
                 <Alert color="red" role="alert">
