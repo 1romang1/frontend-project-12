@@ -1,9 +1,10 @@
 import { useEffect } from 'react';
-import { Alert, AppShell, Box, Burger, Button, Center, Group, Loader, Paper, ScrollArea, Stack, Text, Title } from '@mantine/core';
+import { Alert, AppShell, Box, Burger, Button, Center, Group, Loader, Paper, ScrollArea, Stack, Text } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
-import { useQuery, useQueryClient } from '@tanstack/react-query';
-import { useNavigate } from 'react-router-dom';
+import { useQuery } from '@tanstack/react-query';
+import useLogout from '../hooks/useLogout.js';
 import { api } from '../api/client.js';
+import AppHeader from '../components/AppHeader.jsx';
 import ChannelSidebar from '../components/ChannelSidebar.jsx';
 import MessageComposer from '../components/MessageComposer.jsx';
 import { useAuthStore } from '../store/auth.js';
@@ -13,12 +14,9 @@ import { getDefaultChannelId } from '../utils/channels.js';
 export default function ChatPage() {
   const [mobileOpened, { toggle, close }] = useDisclosure(false);
   const token = useAuthStore((state) => state.token);
-  const username = useAuthStore((state) => state.username);
-  const logout = useAuthStore((state) => state.logout);
   const channelId = useUiStore((state) => state.currentChannelId);
   const selectChannel = useUiStore((state) => state.selectChannel);
-  const navigate = useNavigate();
-  const queryClient = useQueryClient();
+  const handleLogout = useLogout();
   const channelsQuery = useQuery({ queryKey: ['channels'], queryFn: api.channels, enabled: Boolean(token) });
   const messagesQuery = useQuery({ queryKey: ['messages'], queryFn: api.messages, enabled: Boolean(token) });
   const channels = channelsQuery.data ?? [];
@@ -33,13 +31,6 @@ export default function ChatPage() {
   const currentChannel = channels.find(({ id }) => id === channelId);
   const currentMessages = messages.filter((message) => message.channelId === channelId);
 
-  const handleLogout = () => {
-    logout();
-    selectChannel(null);
-    queryClient.clear();
-    navigate('/login', { replace: true });
-  };
-
   return (
     <AppShell
       header={{ height: 64 }}
@@ -47,16 +38,9 @@ export default function ChatPage() {
       padding="md"
     >
       <AppShell.Header>
-        <Group h="100%" px="md" justify="space-between">
-          <Group gap="sm">
-            <Burger opened={mobileOpened} onClick={toggle} hiddenFrom="sm" size="sm" aria-label="Открыть меню" />
-            <Title order={3}>Hexlet Chat</Title>
-          </Group>
-          <Group gap="sm">
-            <Text size="sm" visibleFrom="xs">{username}</Text>
-            <Button variant="subtle" size="compact-sm" onClick={handleLogout}>Выйти</Button>
-          </Group>
-        </Group>
+        <AppHeader burger={(
+          <Burger opened={mobileOpened} onClick={toggle} hiddenFrom="sm" size="sm" aria-label="Открыть меню" />
+        )} />
       </AppShell.Header>
       <AppShell.Navbar p="md">
         <ChannelSidebar channels={channels} onSelect={close} />

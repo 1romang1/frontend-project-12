@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 
 export default function NotFoundPage() {
   return (
-    <Center h="100dvh">
+    <Center mih="calc(100dvh - 64px)">
       <Stack align="center" gap="md">
         <Title order={1}>404</Title>
         <Text>Страница не найдена</Text>
