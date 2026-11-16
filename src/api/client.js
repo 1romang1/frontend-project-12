@@ -26,5 +26,7 @@ export const api = {
   channels: () => request('GET', '/channels'),
   messages: () => request('GET', '/messages'),
   createChannel: (channel) => request('POST', '/channels', channel),
+  renameChannel: ({ id, name }) => request('PATCH', `/channels/${id}`, { name }),
+  removeChannel: (id) => request('DELETE', `/channels/${id}`),
   sendMessage: (message) => request('POST', '/messages', message),
 };
