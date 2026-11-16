@@ -1,10 +1,23 @@
+install:
+	npm install
+
 build:
-	cd frontend/ && npm run build
+	npm run build
 
 start:
-	npx start-server -s ./frontend/dist
+	npm run start
 
-dev:
-	npx concurrently \
-	"cd frontend && npm run dev" \
-	"npx start-server"
+start-backend:
+	npm run start
+
+start-frontend:
+	npm run dev
+
+develop:
+	make start-backend & make start-frontend
+
+test:
+	npm test
+
+lint:
+	npm run lint
