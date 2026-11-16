@@ -1,21 +1,17 @@
 import { hasLength } from '@mantine/form';
-
-const lengthValidator = hasLength(
-  { min: 3, max: 20 },
-  'Название должно содержать от 3 до 20 символов',
-);
+import i18n from '../i18n.js';
 
 export const normalizedChannelName = (name) => name.trim().toLocaleLowerCase();
 
 export function validateChannelName(value, channels, exceptId = null) {
   const name = value.trim();
-  const lengthError = lengthValidator(name);
+  const lengthError = hasLength({ min: 3, max: 20 }, i18n.t('validation.channelLength'))(name);
   if (lengthError) return lengthError;
 
   const duplicate = channels.some((channel) =>
     channel.id !== exceptId && normalizedChannelName(channel.name) === normalizedChannelName(name)
   );
-  return duplicate ? 'Такое название канала уже существует' : null;
+  return duplicate ? i18n.t('validation.channelDuplicate') : null;
 }
 
 export function getDefaultChannelId(channels = [], removedId = null) {

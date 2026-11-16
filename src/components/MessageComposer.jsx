@@ -1,15 +1,17 @@
 import { Alert, Button, Group, Stack, TextInput } from '@mantine/core';
 import { useForm } from '@mantine/form';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { useTranslation } from 'react-i18next';
 import { api } from '../api/client.js';
 import { useAuthStore } from '../store/auth.js';
 
 export default function MessageComposer({ channelId }) {
+  const { t } = useTranslation();
   const queryClient = useQueryClient();
   const username = useAuthStore((state) => state.username);
   const form = useForm({
     initialValues: { body: '' },
-    validate: { body: (value) => value.trim() ? null : 'Введите сообщение' },
+    validate: { body: (value) => value.trim() ? null : t('chat.messageRequired') },
   });
   const mutation = useMutation({
     mutationFn: api.sendMessage,
@@ -27,18 +29,18 @@ export default function MessageComposer({ channelId }) {
     })}>
       <Stack gap="xs">
         {mutation.isError && (
-          <Alert color="red" role="alert">Не удалось отправить сообщение. Проверьте соединение и повторите попытку.</Alert>
+          <Alert color="red" role="alert">{t('chat.sendFailed')}</Alert>
         )}
         <Group align="flex-start" wrap="nowrap">
           <TextInput
-            aria-label="Новое сообщение"
-            placeholder="Введите сообщение..."
+            aria-label={t('chat.newMessage')}
+            placeholder={t('chat.messagePlaceholder')}
             disabled={!channelId || mutation.isPending}
             w="100%"
             {...form.getInputProps('body')}
           />
           <Button type="submit" disabled={!channelId || !form.values.body.trim()} loading={mutation.isPending}>
-            Отправить
+            {t('chat.send')}
           </Button>
         </Group>
       </Stack>
