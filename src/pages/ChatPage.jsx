@@ -11,6 +11,7 @@ import MessageComposer from '../components/MessageComposer.jsx';
 import { useAuthStore } from '../store/auth.js';
 import { useUiStore } from '../store/ui.js';
 import { getDefaultChannelId } from '../utils/channels.js';
+import { censorProfanity } from '../utils/profanity.js';
 
 export default function ChatPage() {
   const { t } = useTranslation();
@@ -75,7 +76,7 @@ export default function ChatPage() {
                   {currentMessages.map((message) => (
                     <Box key={message.id}>
                       <Text fw={700} size="sm" style={{ overflowWrap: 'anywhere' }}>{message.username}</Text>
-                      <Text size="sm" style={{ overflowWrap: 'anywhere' }}>{message.body}</Text>
+                      <Text size="sm" style={{ overflowWrap: 'anywhere' }}>{censorProfanity(message.body)}</Text>
                     </Box>
                   ))}
                 </Stack>
