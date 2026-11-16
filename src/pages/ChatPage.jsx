@@ -8,6 +8,7 @@ import ChannelSidebar from '../components/ChannelSidebar.jsx';
 import MessageComposer from '../components/MessageComposer.jsx';
 import { useAuthStore } from '../store/auth.js';
 import { useUiStore } from '../store/ui.js';
+import { getDefaultChannelId } from '../utils/channels.js';
 
 export default function ChatPage() {
   const [mobileOpened, { toggle, close }] = useDisclosure(false);
@@ -25,8 +26,7 @@ export default function ChatPage() {
 
   useEffect(() => {
     if (channelsQuery.isSuccess && channels.length > 0 && !channels.some(({ id }) => id === channelId)) {
-      const general = channels.find(({ name }) => name.toLowerCase() === 'general');
-      selectChannel((general ?? channels[0]).id);
+      selectChannel(getDefaultChannelId(channels));
     }
   }, [channels, channelId, channelsQuery.isSuccess, selectChannel]);
 
@@ -75,12 +75,12 @@ export default function ChatPage() {
           </Alert>
         )}
         {channelsQuery.isSuccess && messagesQuery.isSuccess && (
-          <Stack h="calc(100dvh - 110px)" gap="md">
+          <Stack h="calc(100dvh - 110px)" gap="md" style={{ minHeight: 0 }}>
             <Paper withBorder p="md" radius="md">
-              <Text fw={700}># {currentChannel?.name ?? 'Загрузка канала'}</Text>
+              <Text fw={700} style={{ overflowWrap: 'anywhere' }}># {currentChannel?.name ?? 'Загрузка канала'}</Text>
               <Text size="sm" c="dimmed">Сообщений: {currentMessages.length}</Text>
             </Paper>
-            <Box h="calc(100dvh - 288px)">
+            <Box style={{ minHeight: 0, minWidth: 0, flex: 1 }}>
               <ScrollArea h="100%" type="auto" offsetScrollbars>
                 <Stack gap="md" px="xs" py="sm">
                   {currentMessages.length === 0 && (
@@ -88,8 +88,8 @@ export default function ChatPage() {
                   )}
                   {currentMessages.map((message) => (
                     <Box key={message.id}>
-                      <Text fw={700} size="sm">{message.username}</Text>
-                      <Text size="sm" >{message.body}</Text>
+                      <Text fw={700} size="sm" style={{ overflowWrap: 'anywhere' }}>{message.username}</Text>
+                      <Text size="sm" style={{ overflowWrap: 'anywhere' }}>{message.body}</Text>
                     </Box>
                   ))}
                 </Stack>
