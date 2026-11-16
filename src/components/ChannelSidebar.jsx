@@ -1,8 +1,10 @@
 import { ActionIcon, Button, Group, Menu, ScrollArea, Stack, Text } from '@mantine/core';
+import { useTranslation } from 'react-i18next';
 import ChannelModals from './ChannelModals.jsx';
 import { useUiStore } from '../store/ui.js';
 
 export default function ChannelSidebar({ channels, onSelect }) {
+  const { t } = useTranslation();
   const currentChannelId = useUiStore((state) => state.currentChannelId);
   const selectChannel = useUiStore((state) => state.selectChannel);
   const openModal = useUiStore((state) => state.openModal);
@@ -10,8 +12,8 @@ export default function ChannelSidebar({ channels, onSelect }) {
   return (
     <>
       <Group justify="space-between" mb="md" wrap="nowrap">
-        <Text fw={700}>Каналы</Text>
-        <Button size="compact-sm" variant="light" aria-label="Добавить канал" onClick={() => openModal('create')}>+</Button>
+        <Text fw={700}>{t('channels.title')}</Text>
+        <Button size="compact-sm" variant="light" aria-label={t('channels.add')} onClick={() => openModal('create')}>+</Button>
       </Group>
       <ScrollArea h="calc(100dvh - 190px)" type="auto" offsetScrollbars>
         <Stack gap={4}>
@@ -34,15 +36,15 @@ export default function ChannelSidebar({ channels, onSelect }) {
                   <Menu.Target>
                     <ActionIcon
                       variant="subtle"
-                      aria-label={`Управление каналом ${channel.name}`}
-                      title={`Управление каналом ${channel.name}`}
+                      aria-label={t('channels.manage', { name: channel.name })}
+                      title={t('channels.manage', { name: channel.name })}
                     >
                       ⋯
                     </ActionIcon>
                   </Menu.Target>
                   <Menu.Dropdown>
-                    <Menu.Item onClick={() => openModal('rename', channel.id)}>Переименовать</Menu.Item>
-                    <Menu.Item color="red" onClick={() => openModal('remove', channel.id)}>Удалить</Menu.Item>
+                    <Menu.Item onClick={() => openModal('rename', channel.id)}>{t('channels.rename')}</Menu.Item>
+                    <Menu.Item color="red" onClick={() => openModal('remove', channel.id)}>{t('channels.remove')}</Menu.Item>
                   </Menu.Dropdown>
                 </Menu>
               )}

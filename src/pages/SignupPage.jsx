@@ -1,12 +1,14 @@
 import { Alert, Anchor, Button, Container, Paper, PasswordInput, Stack, Text, TextInput, Title } from '@mantine/core';
 import { useForm } from '@mantine/form';
 import { useMutation } from '@tanstack/react-query';
+import { useTranslation } from 'react-i18next';
 import { Link, Navigate, useNavigate } from 'react-router-dom';
 import { api } from '../api/client.js';
 import { useAuthStore } from '../store/auth.js';
 import { toSignupCredentials, validateSignup } from '../utils/signup.js';
 
 export default function SignupPage() {
+  const { t } = useTranslation();
   const token = useAuthStore((state) => state.token);
   const login = useAuthStore((state) => state.login);
   const navigate = useNavigate();
@@ -24,7 +26,7 @@ export default function SignupPage() {
     },
     onError: (error) => {
       if (error.status === 409) {
-        form.setFieldError('username', 'Это имя пользователя уже занято');
+        form.setFieldError('username', t('signup.duplicateField'));
       }
     },
   });
@@ -39,9 +41,9 @@ export default function SignupPage() {
             if (!mutation.isPending) mutation.mutate(toSignupCredentials(values));
           })}>
             <Stack>
-              <Title order={3}>Регистрация</Title>
+              <Title order={3}>{t('signup.title')}</Title>
               <TextInput
-                label="Имя пользователя"
+                label={t('common.username')}
                 required
                 autoFocus
                 autoComplete="username"
@@ -50,7 +52,7 @@ export default function SignupPage() {
                 {...form.getInputProps('username')}
               />
               <PasswordInput
-                label="Пароль"
+                label={t('common.password')}
                 required
                 autoComplete="new-password"
                 disabled={mutation.isPending}
@@ -58,7 +60,7 @@ export default function SignupPage() {
                 {...form.getInputProps('password')}
               />
               <PasswordInput
-                label="Подтверждение пароля"
+                label={t('signup.confirmPassword')}
                 required
                 autoComplete="new-password"
                 disabled={mutation.isPending}
@@ -67,19 +69,17 @@ export default function SignupPage() {
               />
               {mutation.isError && (
                 <Alert color="red" role="alert">
-                  {mutation.error?.status === 409
-                    ? 'Пользователь с таким именем уже существует'
-                    : 'Не удалось зарегистрироваться. Проверьте соединение и попробуйте ещё раз.'}
+                  {mutation.error?.status === 409 ? t('signup.duplicate') : t('signup.failed')}
                 </Alert>
               )}
               <Button type="submit" loading={mutation.isPending} fullWidth>
-                Зарегистрироваться
+                {t('signup.submit')}
               </Button>
             </Stack>
           </form>
         </Paper>
         <Text ta="center" size="sm">
-          Есть аккаунт? <Anchor component={Link} to="/login">Войти</Anchor>
+          {t('signup.hasAccount')}{' '}<Anchor component={Link} to="/login">{t('signup.loginLink')}</Anchor>
         </Text>
       </Stack>
     </Container>

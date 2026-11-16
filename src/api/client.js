@@ -1,3 +1,4 @@
+import i18n from '../i18n.js';
 import { useAuthStore } from '../store/auth.js';
 
 export async function request(method, path, body) {
@@ -13,7 +14,7 @@ export async function request(method, path, body) {
   const text = await response.text();
   const data = text ? JSON.parse(text) : null;
   if (!response.ok) {
-    const error = new Error(data?.message || `Ошибка сервера (${response.status})`);
+    const error = new Error(data?.message || i18n.t('errors.server', { status: response.status }));
     error.status = response.status;
     throw error;
   }

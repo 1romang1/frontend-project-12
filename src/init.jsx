@@ -1,9 +1,10 @@
-
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { BrowserRouter, MemoryRouter } from 'react-router-dom';
 import { MantineProvider } from '@mantine/core';
+import { I18nextProvider } from 'react-i18next';
 
 import App from './App.jsx';
+import i18n from './i18n.js';
 import { subscribeToChatEvents } from './services/socketEvents.js';
 
 // Hexlet's automated tests may supply their own socket to this function.
@@ -19,24 +20,23 @@ const init = async (socket) => {
 
   subscribeToChatEvents(socket, queryClient);
 
-  // Use MemoryRouter for server-side tests
-  // and BrowserRouter for the browser.
-  const Router = typeof window === 'undefined'
-    ? MemoryRouter
-    : BrowserRouter;
+  // Use MemoryRouter for server-side tests and BrowserRouter in the browser.
+  const Router = typeof window === 'undefined' ? MemoryRouter : BrowserRouter;
 
   return (
-    <MantineProvider>
-      <QueryClientProvider client={queryClient}>
-        <Router
-          {...(typeof window === 'undefined'
-            ? { initialEntries: ['/login'] }
-            : {})}
-        >
-          <App />
-        </Router>
-      </QueryClientProvider>
-    </MantineProvider>
+    <I18nextProvider i18n={i18n}>
+      <MantineProvider>
+        <QueryClientProvider client={queryClient}>
+          <Router
+            {...(typeof window === 'undefined'
+              ? { initialEntries: ['/login'] }
+              : {})}
+          >
+            <App />
+          </Router>
+        </QueryClientProvider>
+      </MantineProvider>
+    </I18nextProvider>
   );
 };
 

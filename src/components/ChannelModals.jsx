@@ -1,12 +1,14 @@
 import { Alert, Button, Group, Modal, Stack, Text, TextInput } from '@mantine/core';
 import { useForm } from '@mantine/form';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { useTranslation } from 'react-i18next';
 import { api } from '../api/client.js';
 import { handleChannelRemoval } from '../services/channelCache.js';
 import { useUiStore } from '../store/ui.js';
 import { validateChannelName } from '../utils/channels.js';
 
 function ChannelNameModal({ type, channels, channel, onCreated }) {
+  const { t } = useTranslation();
   const queryClient = useQueryClient();
   const selectChannel = useUiStore((state) => state.selectChannel);
   const closeModal = useUiStore((state) => state.closeModal);
@@ -44,7 +46,7 @@ function ChannelNameModal({ type, channels, channel, onCreated }) {
     <Modal
       opened
       centered
-      title={isCreate ? 'Добавить канал' : 'Переименовать канал'}
+      title={isCreate ? t('channels.createTitle') : t('channels.renameTitle')}
       onClose={closeModal}
       closeOnEscape={!mutation.isPending}
       closeOnClickOutside={!mutation.isPending}
@@ -53,8 +55,8 @@ function ChannelNameModal({ type, channels, channel, onCreated }) {
       <form onSubmit={form.onSubmit(handleSubmit)}>
         <Stack gap="md">
           <TextInput
-            label="Название канала"
-            aria-label="Название канала"
+            label={t('channels.name')}
+            aria-label={t('channels.name')}
             required
             data-autofocus
             key={form.key('name')}
@@ -62,15 +64,13 @@ function ChannelNameModal({ type, channels, channel, onCreated }) {
           />
           {mutation.isError && (
             <Alert color="red" role="alert">
-              {mutation.error?.status === 409
-                ? 'Канал с таким названием уже существует'
-                : 'Не удалось сохранить канал. Проверьте соединение и повторите попытку.'}
+              {mutation.error?.status === 409 ? t('channels.alreadyExists') : t('channels.saveFailed')}
             </Alert>
           )}
           <Group justify="flex-end">
-            <Button variant="default" onClick={closeModal} disabled={mutation.isPending}>Отмена</Button>
+            <Button variant="default" onClick={closeModal} disabled={mutation.isPending}>{t('common.cancel')}</Button>
             <Button type="submit" loading={mutation.isPending}>
-              {isCreate ? 'Создать' : 'Переименовать'}
+              {isCreate ? t('channels.create') : t('channels.rename')}
             </Button>
           </Group>
         </Stack>
@@ -80,6 +80,7 @@ function ChannelNameModal({ type, channels, channel, onCreated }) {
 }
 
 function RemoveChannelModal({ channel }) {
+  const { t } = useTranslation();
   const queryClient = useQueryClient();
   const closeModal = useUiStore((state) => state.closeModal);
   const mutation = useMutation({
@@ -93,7 +94,7 @@ function RemoveChannelModal({ channel }) {
     <Modal
       opened
       centered
-      title="Удалить канал"
+      title={t('channels.removeTitle')}
       onClose={closeModal}
       closeOnEscape={!mutation.isPending}
       closeOnClickOutside={!mutation.isPending}
@@ -104,11 +105,11 @@ function RemoveChannelModal({ channel }) {
         if (!mutation.isPending) mutation.mutate(channel.id);
       }}>
         <Stack>
-          <Text>Удалить канал «# {channel.name}»? Все его сообщения также будут удалены.</Text>
-          {mutation.isError && <Alert color="red" role="alert">Не удалось удалить канал. Повторите попытку.</Alert>}
+          <Text>{t('channels.removeConfirm', { name: channel.name })}</Text>
+          {mutation.isError && <Alert color="red" role="alert">{t('channels.removeFailed')}</Alert>}
           <Group justify="flex-end">
-            <Button variant="default" onClick={closeModal} disabled={mutation.isPending}>Отмена</Button>
-            <Button color="red" type="submit" loading={mutation.isPending}>Удалить</Button>
+            <Button variant="default" onClick={closeModal} disabled={mutation.isPending}>{t('common.cancel')}</Button>
+            <Button color="red" type="submit" loading={mutation.isPending}>{t('channels.remove')}</Button>
           </Group>
         </Stack>
       </form>

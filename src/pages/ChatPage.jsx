@@ -2,6 +2,7 @@ import { useEffect } from 'react';
 import { Alert, AppShell, Box, Burger, Button, Center, Group, Loader, Paper, ScrollArea, Stack, Text } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
 import { useQuery } from '@tanstack/react-query';
+import { useTranslation } from 'react-i18next';
 import useLogout from '../hooks/useLogout.js';
 import { api } from '../api/client.js';
 import AppHeader from '../components/AppHeader.jsx';
@@ -12,6 +13,7 @@ import { useUiStore } from '../store/ui.js';
 import { getDefaultChannelId } from '../utils/channels.js';
 
 export default function ChatPage() {
+  const { t } = useTranslation();
   const [mobileOpened, { toggle, close }] = useDisclosure(false);
   const token = useAuthStore((state) => state.token);
   const channelId = useUiStore((state) => state.currentChannelId);
@@ -39,7 +41,7 @@ export default function ChatPage() {
     >
       <AppShell.Header>
         <AppHeader burger={(
-          <Burger opened={mobileOpened} onClick={toggle} hiddenFrom="sm" size="sm" aria-label="Открыть меню" />
+          <Burger opened={mobileOpened} onClick={toggle} hiddenFrom="sm" size="sm" aria-label={t('chat.openMenu')} />
         )} />
       </AppShell.Header>
       <AppShell.Navbar p="md">
@@ -47,28 +49,28 @@ export default function ChatPage() {
       </AppShell.Navbar>
       <AppShell.Main>
         {(channelsQuery.isPending || messagesQuery.isPending) && (
-          <Center h="60vh"><Loader aria-label="Загрузка чата" /></Center>
+          <Center h="60vh"><Loader aria-label={t('chat.loading')} /></Center>
         )}
         {(channelsQuery.isError || messagesQuery.isError) && (
-          <Alert color="red" title="Не удалось загрузить чат" role="alert">
-            Проверьте подключение к сети или повторно войдите в аккаунт.
+          <Alert color="red" title={t('chat.loadFailedTitle')} role="alert">
+            {t('chat.loadFailedHelp')}
             <Group mt="md">
-              <Button size="xs" onClick={() => { channelsQuery.refetch(); messagesQuery.refetch(); }}>Повторить</Button>
-              <Button size="xs" variant="outline" onClick={handleLogout}>Войти заново</Button>
+              <Button size="xs" onClick={() => { channelsQuery.refetch(); messagesQuery.refetch(); }}>{t('chat.retry')}</Button>
+              <Button size="xs" variant="outline" onClick={handleLogout}>{t('chat.loginAgain')}</Button>
             </Group>
           </Alert>
         )}
         {channelsQuery.isSuccess && messagesQuery.isSuccess && (
           <Stack h="calc(100dvh - 110px)" gap="md" style={{ minHeight: 0 }}>
             <Paper withBorder p="md" radius="md">
-              <Text fw={700} style={{ overflowWrap: 'anywhere' }}># {currentChannel?.name ?? 'Загрузка канала'}</Text>
-              <Text size="sm" c="dimmed">Сообщений: {currentMessages.length}</Text>
+              <Text fw={700} style={{ overflowWrap: 'anywhere' }}># {currentChannel?.name ?? t('chat.loadingChannel')}</Text>
+              <Text size="sm" c="dimmed">{t('chat.messagesCount', { number: currentMessages.length })}</Text>
             </Paper>
             <Box style={{ minHeight: 0, minWidth: 0, flex: 1 }}>
               <ScrollArea h="100%" type="auto" offsetScrollbars>
                 <Stack gap="md" px="xs" py="sm">
                   {currentMessages.length === 0 && (
-                    <Text c="dimmed">Пока нет сообщений. Напишите первое!</Text>
+                    <Text c="dimmed">{t('chat.empty')}</Text>
                   )}
                   {currentMessages.map((message) => (
                     <Box key={message.id}>
